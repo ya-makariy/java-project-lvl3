@@ -24,24 +24,32 @@ public final class MapSchema extends BaseSchema {
     public MapSchema shape(Map<String, BaseSchema> schemas) {
 
         Predicate<Object> shapeChecks = map -> {
-            if (((Map) map).size() != schemas.size()) {
+            if (shapePreChecks(map, schemas)) {
+                return (shapeMajorChecks(map, schemas));
+            } else {
                 return false;
             }
-
-            if (!schemas.entrySet().stream()
-                    .allMatch(e -> ((Map) map).containsKey(e.getKey()))) {
-                return false;
-            }
-            for (String key: schemas.keySet()) {
-                Object o = ((Map) map).get(key);
-                if (!schemas.get(key).isValid(o)) {
-                    return false;
-                }
-            }
-            return true;
         };
         addChecks("shape", shapeChecks);
         return this;
+    }
+
+    private boolean shapePreChecks(Object map, Map<String, BaseSchema> schemas) {
+        if (((Map) map).size() != schemas.size()) {
+            return false;
+        }
+        return schemas.entrySet().stream()
+                .allMatch(e -> ((Map) map).containsKey(e.getKey()));
+    }
+
+    private boolean shapeMajorChecks(Object map, Map<String, BaseSchema> schemas) {
+        for (String key : schemas.keySet()) {
+            Object o = ((Map) map).get(key);
+            if (!schemas.get(key).isValid(o)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
