@@ -15,7 +15,7 @@ public final class NumberSchema extends BaseSchema {
     }
 
     public NumberSchema positive() {
-        Predicate<Object> positiveCheck = num -> (num != null) && (((int) num) > 0);
+        Predicate<Object> positiveCheck = num -> (num == null) || (((int) num) > 0);
         addChecks("positive", positiveCheck);
         return this;
     }
