@@ -127,11 +127,11 @@ public class ValidatorTest {
 
         Map data = new HashMap();
         data.put("key", "value");
-        assertThat(schema.sizeOf(ONE).isValid(data)).isTrue();
+        assertThat(schema.sizeof(ONE).isValid(data)).isTrue();
         data.put(ONE, TEN);
         assertThat(schema.isValid(data)).isFalse();
         data.put(THREE, "3");
-        assertThat(schema.sizeOf(THREE).isValid(data)).isTrue();
+        assertThat(schema.sizeof(THREE).isValid(data)).isTrue();
     }
 
     @Test
