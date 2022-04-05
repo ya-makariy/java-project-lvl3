@@ -1,8 +1,13 @@
 package hexlet.code;
 
+import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidatorTest {
@@ -91,5 +96,39 @@ public class ValidatorTest {
         assertThat(schema.isValid(SIX)).isTrue();
         assertThat(schema.isValid(ONE)).isFalse();
         assertThat(schema.isValid(TEN)).isFalse();
+    }
+
+    @Test
+    public void testMapSchemaIsValid() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+        assertThat(schema.isValid(new HashMap())).isTrue();
+        assertThat(schema.isValid(null)).isTrue();
+    }
+
+    @Test
+    public void testMapSchemaRequired() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+        schema.required();
+
+        assertThat(schema.isValid("1")).isFalse();
+        assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid(new HashMap())).isTrue();
+    }
+
+
+    @Test
+    public void testMapSchemaSizeOf() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+        schema.required();
+        Map data = new HashMap();
+        data.put("key", "value");
+        assertThat(schema.sizeOf(ONE).isValid(data)).isTrue();
+        data.put(ONE, TEN);
+        assertThat(schema.isValid(data)).isFalse();
+        data.put(THREE, "3");
+        assertThat(schema.sizeOf(THREE).isValid(data)).isTrue();
     }
 }
