@@ -148,6 +148,8 @@ public class ValidatorTest {
         human1.put("name", "Kolya");
         human1.put("age", TEN);
         assertThat(schema.isValid(human1)).isTrue();
+        human1.put("wrong", "wrong");
+        assertThat(schema.isValid(human1)).isFalse();
 
         Map<String, Object> human2 = new HashMap<>();
         human2.put("name", "Maya");
