@@ -15,7 +15,7 @@ public final class MapSchema extends BaseSchema {
         return this;
     }
 
-    public MapSchema sizeOf(int size) {
+    public MapSchema sizeof(int size) {
         Predicate<Object> sizeOfCheck = map -> ((Map) map).size() == size;
         addChecks("sizeOf", sizeOfCheck);
         return this;
