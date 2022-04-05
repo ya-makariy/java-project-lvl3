@@ -1,51 +1,27 @@
 package hexlet.code.schemas;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Predicate;
 
-public final class StringSchema {
-    private final Map<String, Object> checks = new HashMap<>();
+public final class StringSchema extends BaseSchema {
     public StringSchema() {
-
+        super();
     }
 
-
-    public boolean isValid(String str) {
-        if (this.checks.containsKey("required")) {
-            if (str == null) {
-                return false;
-            } else if (str.isEmpty()) {
-                return false;
-            }
-        }
-
-        if (this.checks.containsKey("minLength")) {
-            if (str.length() < (int) checks.get("minLength")) {
-                return false;
-            }
-        }
-
-        if (this.checks.containsKey("contains")) {
-            String sub = (String) this.checks.get("contains");
-            if (!str.contains(sub)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public void required() {
-        this.checks.put("required", "0");
+    public StringSchema required() {
+        Predicate<Object> requiredCheck = str -> ((str != null) && !((String) str).isEmpty());
+        addChecks("required", requiredCheck);
+        return this;
     }
 
     public StringSchema minLength(int strLength) {
-        this.checks.put("minLength", strLength);
+        Predicate<Object> minLengthCheck = str -> !(((String) str).length() < strLength);
+        addChecks("minLength", minLengthCheck);
         return this;
     }
 
     public StringSchema contains(String subString) {
-        this.checks.put("contains", subString);
+        Predicate<Object> containsCheck = str -> ((String) str).contains(subString);
+        addChecks("contains", containsCheck);
         return this;
     }
 }
